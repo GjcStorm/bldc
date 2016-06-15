@@ -19,7 +19,6 @@
 #include "hal.h"
 #include "stm32f4xx_conf.h"
 #include "isr_vector_table.h"
-#include "main.h"
 #include "mc_interface.h"
 #include "servo.h"
 #include "hw.h"
@@ -47,5 +46,14 @@ CH_IRQ_HANDLER(HW_ENC_EXTI_ISR_VEC) {
 
 		// Clear the EXTI line pending bit
 		EXTI_ClearITPendingBit(HW_ENC_EXTI_LINE);
+	}
+}
+
+CH_IRQ_HANDLER(HW_ENC_TIM_ISR_VEC) {
+	if (TIM_GetITStatus(HW_ENC_TIM, TIM_IT_Update) != RESET) {
+		encoder_tim_isr();
+
+		// Clear the IT pending bit
+		TIM_ClearITPendingBit(HW_ENC_TIM, TIM_IT_Update);
 	}
 }

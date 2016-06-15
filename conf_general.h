@@ -27,18 +27,18 @@
 
 // Firmware version
 #define FW_VERSION_MAJOR	2
-#define FW_VERSION_MINOR	8
+#define FW_VERSION_MINOR	18
 
 #include "datatypes.h"
 
 /*
  * Settings
  */
-#define AUTO_PRINT_FAULTS		0
 #define SYSTEM_CORE_CLOCK		168000000
 
 // Settings and parameters to override
 //#define VIN_R1				33000.0
+//#define VIN_R1				39200.0
 //#define VIN_R2				2200.0
 //#define CURRENT_AMP_GAIN	10.0
 //#define CURRENT_SHUNT_RES	0.0005
@@ -57,7 +57,7 @@
 #define HW_VERSION_46 // Also for 4.7
 //#define HW_VERSION_48
 //#define HW_VERSION_49
-//#define HW_VERSION_410 // Also for 4.11
+#define HW_VERSION_410 // Also for 4.11 and 4.12
 //#define HW_VERSION_R2
 //#define HW_VERSION_VICTOR_R1A
 #endif
@@ -65,15 +65,15 @@
 /*
  * Select default user motor configuration
  */
-//#define MCCONF_DEFAULT_USER		"mcconf_outrunner2.h"
 //#define MCCONF_DEFAULT_USER		"mcconf_sten.h"
-//#define MCCONF_DEFAULT_USER		"mcconf_foc_erwin.h"
-//#define MCCONF_DEFAULT_USER		"mcconf_foc_scorpion.h"
+//#define MCCONF_DEFAULT_USER		"mcconf_sp_540kv.h"
+//#define MCCONF_DEFAULT_USER		"mcconf_castle_2028.h"
 
 /*
  * Select default user app configuration
  */
 //#define APPCONF_DEFAULT_USER		"appconf_example_ppm.h"
+//#define APPCONF_DEFAULT_USER		"appconf_custom.h"
 
 /*
  * Select which custom application to use. To configure the default applications and
@@ -81,13 +81,6 @@
  * values.
  */
 //#define USE_APP_STEN
-
-/*
- * Use encoder
- */
-#ifndef ENCODER_ENABLE
-#define ENCODER_ENABLE			0
-#endif
 
 /*
  * Enable CAN-bus

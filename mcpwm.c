@@ -494,7 +494,7 @@ void mcpwm_set_configuration(volatile mc_configuration *configuration) {
  * The commutations corresponding to the hall sensor states in the forward direction-
  */
 void mcpwm_init_hall_table(int8_t *table) {
-	const int fwd_to_rev[7] = {-1,4,3,2,1,6,5};
+	const int fwd_to_rev[7] = {-1,1,6,5,4,3,2};
 
 	for (int i = 0;i < 8;i++) {
 		hall_to_phase_table[8 + i] = table[i];
@@ -505,13 +505,7 @@ void mcpwm_init_hall_table(int8_t *table) {
 			continue;
 		}
 
-		ind_now += 2;
-		if (ind_now > 6) {
-			ind_now -= 6;
-		}
-		ind_now = fwd_to_rev[ind_now];
-
-		hall_to_phase_table[i] = ind_now;
+		hall_to_phase_table[i] = fwd_to_rev[ind_now];
 	}
 }
 
@@ -1922,7 +1916,7 @@ void mcpwm_adc_int_handler(void *p, uint32_t flags) {
 
 	mc_interface_mc_timer_isr();
 
-	if (ENCODER_ENABLE) {
+	if (encoder_is_configured()) {
 		run_pid_control_pos(1.0 / switching_frequency_now);
 	}
 
@@ -2051,7 +2045,7 @@ void mcpwm_reset_hall_detect_table(void) {
 int mcpwm_get_hall_detect_result(int8_t *table) {
 	if (WS2811_ENABLE) {
 		return -2;
-	} else if (ENCODER_ENABLE) {
+	} else if (conf->m_sensor_port_mode != SENSOR_PORT_MODE_HALL) {
 		return -3;
 	}
 

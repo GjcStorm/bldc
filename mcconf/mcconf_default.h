@@ -52,7 +52,7 @@
 #define MCCONF_L_MIN_VOLTAGE			8.0		// Minimum input voltage
 #endif
 #ifndef MCCONF_L_MAX_VOLTAGE
-#define MCCONF_L_MAX_VOLTAGE			50.0	// Maximum input voltage
+#define MCCONF_L_MAX_VOLTAGE			57.0	// Maximum input voltage
 #endif
 #ifndef MCCONF_L_BATTERY_CUT_START
 #define MCCONF_L_BATTERY_CUT_START		10.0	// Start limiting the positive current at this voltage
@@ -121,6 +121,9 @@
 #ifndef MCCONF_P_PID_KD
 #define MCCONF_P_PID_KD					0.0004	// Derivative gain
 #endif
+#ifndef MCCONF_P_PID_ANG_DIV
+#define MCCONF_P_PID_ANG_DIV			1.0		// Divide angle by this value
+#endif
 
 // Current control parameters
 #ifndef MCCONF_CC_GAIN
@@ -159,72 +162,7 @@
 #define MCCONF_SL_MAX_FB_CURR_DIR_CHANGE	10.0	// Maximum current during full brake during which a direction change is allowed
 #endif
 
-// FOC
-#ifndef MCCONF_FOC_CURRENT_KP
-#define MCCONF_FOC_CURRENT_KP			0.03
-#endif
-#ifndef MCCONF_FOC_CURRENT_KI
-#define MCCONF_FOC_CURRENT_KI			50.0
-#endif
-#ifndef MCCONF_FOC_F_SW
-#define MCCONF_FOC_F_SW					25000.0
-#endif
-#ifndef MCCONF_FOC_DT_US
-#define MCCONF_FOC_DT_US				0.15 // Microseconds for dead time compensation
-#endif
-#ifndef MCCONF_FOC_ENCODER_INVERTED
-#define MCCONF_FOC_ENCODER_INVERTED		false
-#endif
-#ifndef MCCONF_FOC_ENCODER_OFFSET
-#define MCCONF_FOC_ENCODER_OFFSET		180.0
-#endif
-#ifndef MCCONF_FOC_ENCODER_RATIO
-#define MCCONF_FOC_ENCODER_RATIO		7.0
-#endif
-#ifndef MCCONF_FOC_SENSOR_MODE
-#define MCCONF_FOC_SENSOR_MODE			FOC_SENSOR_MODE_SENSORLESS
-#endif
-#ifndef MCCONF_FOC_PLL_KP
-#define MCCONF_FOC_PLL_KP				40.0
-#endif
-#ifndef MCCONF_FOC_PLL_KI
-#define MCCONF_FOC_PLL_KI				40000.0
-#endif
-#ifndef MCCONF_FOC_MOTOR_L
-#define MCCONF_FOC_MOTOR_L				0.000007
-#endif
-#ifndef MCCONF_FOC_MOTOR_R
-#define MCCONF_FOC_MOTOR_R				0.015
-#endif
-#ifndef MCCONF_FOC_MOTOR_FLUX_LINKAGE
-#define MCCONF_FOC_MOTOR_FLUX_LINKAGE	0.00245
-#endif
-#ifndef MCCONF_FOC_OBSERVER_GAIN
-#define MCCONF_FOC_OBSERVER_GAIN		9e7		// Can be something like 600 / L
-#endif
-#ifndef MCCONF_FOC_DUTY_DOWNRAMP_KP
-#define MCCONF_FOC_DUTY_DOWNRAMP_KP		10.0	// PI controller for duty control when decreasing the duty
-#endif
-#ifndef MCCONF_FOC_DUTY_DOWNRAMP_KI
-#define MCCONF_FOC_DUTY_DOWNRAMP_KI		200.0	// PI controller for duty control when decreasing the duty
-#endif
-#ifndef MCCONF_FOC_OPENLOOP_RPM
-#define MCCONF_FOC_OPENLOOP_RPM			350.0	// Openloop RPM (sensorless low speed or when finding index pulse)
-#endif
-#ifndef MCCONF_FOC_SL_OPENLOOP_HYST
-#define MCCONF_FOC_SL_OPENLOOP_HYST		0.5		// Time below min RPM to activate openloop (s)
-#endif
-#ifndef MCCONF_FOC_SL_OPENLOOP_TIME
-#define MCCONF_FOC_SL_OPENLOOP_TIME		0.5		// Time to remain in openloop (s)
-#endif
-#ifndef MCCONF_FOC_SL_D_CURRENT_DUTY
-#define MCCONF_FOC_SL_D_CURRENT_DUTY	0.0		// Inject d-axis current below this duty cycle in sensorless more
-#endif
-#ifndef MCCONF_FOC_SL_D_CURRENT_FACTOR
-#define MCCONF_FOC_SL_D_CURRENT_FACTOR	0.0		// Maximum q-axis current factor
-#endif
-
-// Default hall sensor table
+// BLDC hall sensor table
 #ifndef MCCONF_HALL_TAB_0
 #define MCCONF_HALL_TAB_0				-1
 #endif
@@ -253,6 +191,98 @@
 #define MCCONF_HALL_ERPM				2000.0	// ERPM above which sensorless commutation is used in hybrid mode
 #endif
 
+// FOC
+#ifndef MCCONF_FOC_CURRENT_KP
+#define MCCONF_FOC_CURRENT_KP			0.03
+#endif
+#ifndef MCCONF_FOC_CURRENT_KI
+#define MCCONF_FOC_CURRENT_KI			50.0
+#endif
+#ifndef MCCONF_FOC_F_SW
+#define MCCONF_FOC_F_SW					20000.0
+#endif
+#ifndef MCCONF_FOC_DT_US
+#define MCCONF_FOC_DT_US				0.08 // Microseconds for dead time compensation
+#endif
+#ifndef MCCONF_FOC_ENCODER_INVERTED
+#define MCCONF_FOC_ENCODER_INVERTED		false
+#endif
+#ifndef MCCONF_FOC_ENCODER_OFFSET
+#define MCCONF_FOC_ENCODER_OFFSET		180.0
+#endif
+#ifndef MCCONF_FOC_ENCODER_RATIO
+#define MCCONF_FOC_ENCODER_RATIO		7.0
+#endif
+#ifndef MCCONF_FOC_SENSOR_MODE
+#define MCCONF_FOC_SENSOR_MODE			FOC_SENSOR_MODE_SENSORLESS
+#endif
+#ifndef MCCONF_FOC_PLL_KP
+#define MCCONF_FOC_PLL_KP				2000.0
+#endif
+#ifndef MCCONF_FOC_PLL_KI
+#define MCCONF_FOC_PLL_KI				20000.0
+#endif
+#ifndef MCCONF_FOC_MOTOR_L
+#define MCCONF_FOC_MOTOR_L				0.000007
+#endif
+#ifndef MCCONF_FOC_MOTOR_R
+#define MCCONF_FOC_MOTOR_R				0.015
+#endif
+#ifndef MCCONF_FOC_MOTOR_FLUX_LINKAGE
+#define MCCONF_FOC_MOTOR_FLUX_LINKAGE	0.00245
+#endif
+#ifndef MCCONF_FOC_OBSERVER_GAIN
+#define MCCONF_FOC_OBSERVER_GAIN		9e7		// Can be something like 600 / L
+#endif
+#ifndef MCCONF_FOC_DUTY_DOWNRAMP_KP
+#define MCCONF_FOC_DUTY_DOWNRAMP_KP		10.0	// PI controller for duty control when decreasing the duty
+#endif
+#ifndef MCCONF_FOC_DUTY_DOWNRAMP_KI
+#define MCCONF_FOC_DUTY_DOWNRAMP_KI		200.0	// PI controller for duty control when decreasing the duty
+#endif
+#ifndef MCCONF_FOC_OPENLOOP_RPM
+#define MCCONF_FOC_OPENLOOP_RPM			1200.0	// Openloop RPM (sensorless low speed or when finding index pulse)
+#endif
+#ifndef MCCONF_FOC_SL_OPENLOOP_HYST
+#define MCCONF_FOC_SL_OPENLOOP_HYST		0.5		// Time below min RPM to activate openloop (s)
+#endif
+#ifndef MCCONF_FOC_SL_OPENLOOP_TIME
+#define MCCONF_FOC_SL_OPENLOOP_TIME		0.5		// Time to remain in openloop (s)
+#endif
+#ifndef MCCONF_FOC_SL_D_CURRENT_DUTY
+#define MCCONF_FOC_SL_D_CURRENT_DUTY	0.0		// Inject d-axis current below this duty cycle in sensorless more
+#endif
+#ifndef MCCONF_FOC_SL_D_CURRENT_FACTOR
+#define MCCONF_FOC_SL_D_CURRENT_FACTOR	0.0		// Maximum q-axis current factor
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_0
+#define MCCONF_FOC_HALL_TAB_0			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_1
+#define MCCONF_FOC_HALL_TAB_1			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_2
+#define MCCONF_FOC_HALL_TAB_2			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_3
+#define MCCONF_FOC_HALL_TAB_3			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_4
+#define MCCONF_FOC_HALL_TAB_4			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_5
+#define MCCONF_FOC_HALL_TAB_5			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_6
+#define MCCONF_FOC_HALL_TAB_6			255
+#endif
+#ifndef MCCONF_FOC_HALL_TAB_7
+#define MCCONF_FOC_HALL_TAB_7			255
+#endif
+#ifndef MCCONF_FOC_SL_ERPM
+#define MCCONF_FOC_SL_ERPM				2500.0	// ERPM above which only the observer is used
+#endif
+
 // Misc
 #ifndef MCCONF_M_FAULT_STOP_TIME
 #define MCCONF_M_FAULT_STOP_TIME		3000	// Ignore commands for this duration in msec when faults occur
@@ -268,6 +298,9 @@
 #endif
 #ifndef MCCONF_M_ENCODER_COUNTS
 #define MCCONF_M_ENCODER_COUNTS			8192	// The number of encoder counts
+#endif
+#ifndef MCCONF_M_SENSOR_PORT_MODE
+#define MCCONF_M_SENSOR_PORT_MODE		SENSOR_PORT_MODE_HALL // The mode of the hall_encoder port
 #endif
 
 #endif /* MCCONF_DEFAULT_H_ */
